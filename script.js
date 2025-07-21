@@ -1,4 +1,3 @@
-//your JS code here. If required.
 document.addEventListener("DOMContentLoaded", () => {
   const inputs = document.querySelectorAll(".code");
 
@@ -6,13 +5,13 @@ document.addEventListener("DOMContentLoaded", () => {
     input.addEventListener("input", (e) => {
       const value = e.target.value;
 
-      // Allow only digits, clear if not digit
+      // Allow only digits
       if (!/^\d$/.test(value)) {
         e.target.value = "";
         return;
       }
 
-      // Move focus to next input if not last
+      // Move focus to next input
       if (idx < inputs.length - 1) {
         inputs[idx + 1].focus();
       }
@@ -23,15 +22,17 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
 
         if (input.value !== "") {
-          // If current input has a value, clear it
+          // Clear current input
           input.value = "";
         } else if (idx > 0) {
-          // Move focus to previous input and clear it
-          inputs[idx - 1].focus();
-          inputs[idx - 1].value = "";
+          // Move focus back and clear
+          setTimeout(() => {
+            inputs[idx - 1].focus();
+            inputs[idx - 1].value = "";
+          }, 0);
         }
       } else if (e.key >= "0" && e.key <= "9") {
-        // Let input event handle digit input
+        // Let input handler process digit
       } else if (e.key === "ArrowLeft" && idx > 0) {
         inputs[idx - 1].focus();
         e.preventDefault();
@@ -39,7 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
         inputs[idx + 1].focus();
         e.preventDefault();
       } else if (e.key !== "Tab") {
-        // Prevent non-digit keys except Tab, arrows, Backspace
         e.preventDefault();
       }
     });
@@ -50,14 +50,13 @@ document.addEventListener("DOMContentLoaded", () => {
       const pasteData = e.clipboardData.getData("text").trim();
       if (!/^\d+$/.test(pasteData)) return;
 
-      // Paste digits starting from current input
       let currentIdx = idx;
       for (const char of pasteData) {
         if (currentIdx >= inputs.length) break;
         inputs[currentIdx].value = char;
         currentIdx++;
       }
-      // Focus the next empty input or last one
+
       if (currentIdx < inputs.length) {
         inputs[currentIdx].focus();
       } else {
@@ -66,7 +65,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Autofocus first input on page load
+  // Auto-focus first input
   if (inputs.length > 0) {
     inputs[0].focus();
   }
